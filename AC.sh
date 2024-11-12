@@ -12,8 +12,8 @@ display_header() {
     echo "#   Aluno: Leonardo Tims                                      #"
     echo "#   Aluno: Guilherme Maia                                     #"
     echo "#-------------------------------------------------------------#"
-    echo "# Rio de Janeiro, $(date +'%d de %B de %Y')                      #"
-    echo "# Hora do Sistema: $(date +'%H Horas e %M Minutos')                    #"
+    echo "# Rio de Janeiro, $(date +'%d de %B de %Y')                   #"
+    echo "# Hora do Sistema: $(date +'%H Horas e %M Minutos')           #"
     echo "###############################################################"
     echo
 }
@@ -21,13 +21,17 @@ display_header() {
 option_1() {
     echo "Você escolheu a Opção 1: Listar diretório"
     read -p "Digite o caminho do diretório que deseja listar: " dir
-    ls "$dir"
+    if [ -d "$dir" ]; then
+        ls "$dir"
+    else
+        echo "Erro: O diretório '$dir' não existe ou o caminho está incorreto."
+    fi
 }
 
 option_2() {
-    echo "Você escolheu a Opção 2!"
+    echo "Você escolheu a Opção 2: Criar arquivo"
     read -p "Digite um nome para criar um arquivo: " nome_arquivo
-    touch $nome_arquivo
+    touch "$nome_arquivo"
     echo "Arquivo $nome_arquivo criado com sucesso!"
 }
 
@@ -39,7 +43,11 @@ option_3() {
 option_4() {
     echo "Você escolheu a Opção 4: Exibir processos do usuário"
     read -p "Digite o nome do usuário: " user
-    ps -u "$user"
+    if id "$user" &>/dev/null; then
+        ps -u "$user"
+    else
+        echo "Erro: O usuário '$user' não existe no sistema."
+    fi
 }
 
 while true; do
@@ -59,7 +67,7 @@ while true; do
         3) option_3 ;;
         4) option_4 ;;
         5) echo "Finalizando o programa..."; exit 0 ;;
-        *) echo "Opção inválida. Tente novamente." ;;
+        *) echo "Opção inválida. Tente novamente."; sleep 1 ;;
     esac
     read -p "Pressione Enter para continuar..." # Pausa antes de voltar ao menu
 done
